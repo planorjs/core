@@ -184,6 +184,47 @@ class Planor {
     return this.#templates
   }
 
+  async sendSms(template, msgopts, oneTimeTemplateLiterals={}) {
+    const matchedTemplates = this.#templates.filter(
+      _t => _t.channel == 'sms' && _t.id == template
+    );
+
+    if (!matchedTemplates) {
+      throw new Error('MISSING_TEMPLATE')
+    }
+
+    const t = matchedTemplates[0];
+    const templateLiterals = Object.assign({}, this.#templateLiterals, oneTimeTemplateLiterals);
+
+    t.parse(templateLiterals);
+
+    const msg = t.getPlainText();
+
+    return await this.#_sendSms(msg, msgopts)
+  }
+
+  async #_sendSms(msg, msgopts, _ind=0) {
+    if (_ind === 0) this.#reset();
+
+    if (!this.#services[_ind]) {
+      this.#errors.push( new Error('NO_SERVICE_TO_TRY') );
+      return undefined;
+    }
+
+    const s = this.#services[_ind];
+
+    if (s.channel != 'sms') {
+      return await this.#_sendSms(msg, msgopts, _ind+1)
+    }
+
+    try {
+      return await s.send(msg, msgopts)
+    } catch (e) {
+      this.#errors.push(e);
+      return await this.#_sendSms(msg, msgopts, _ind+1)
+    }
+  }
+
   async sendEmail(template, msgopts, oneTimeTemplateLiterals={}) {
     const matchedTemplates = this.#templates.filter(
       _t => _t.channel == 'email' && _t.id == template

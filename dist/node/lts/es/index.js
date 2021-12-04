@@ -219,6 +219,8 @@ var _templateLiterals = /*#__PURE__*/new WeakMap();
 
 var _errors = /*#__PURE__*/new WeakMap();
 
+var _sendSms = /*#__PURE__*/new WeakSet();
+
 var _sendEmail = /*#__PURE__*/new WeakSet();
 
 var _generatePlainTextVersion = /*#__PURE__*/new WeakSet();
@@ -234,6 +236,8 @@ class Planor {
     _classPrivateMethodInitSpec(this, _generatePlainTextVersion);
 
     _classPrivateMethodInitSpec(this, _sendEmail);
+
+    _classPrivateMethodInitSpec(this, _sendSms);
 
     _classPrivateFieldInitSpec(this, _domPurifier, {
       writable: true,
@@ -287,6 +291,20 @@ class Planor {
     return _classPrivateFieldGet(this, _templates);
   }
 
+  async sendSms(template, msgopts, oneTimeTemplateLiterals = {}) {
+    const matchedTemplates = _classPrivateFieldGet(this, _templates).filter(_t => _t.channel == 'sms' && _t.id == template);
+
+    if (!matchedTemplates) {
+      throw new Error('MISSING_TEMPLATE');
+    }
+
+    const t = matchedTemplates[0];
+    const templateLiterals = Object.assign({}, _classPrivateFieldGet(this, _templateLiterals), oneTimeTemplateLiterals);
+    t.parse(templateLiterals);
+    const msg = t.getPlainText();
+    return await _classPrivateMethodGet(this, _sendSms, _sendSms2).call(this, msg, msgopts);
+  }
+
   async sendEmail(template, msgopts, oneTimeTemplateLiterals = {}) {
     const matchedTemplates = _classPrivateFieldGet(this, _templates).filter(_t => _t.channel == 'email' && _t.id == template);
 
@@ -337,6 +355,30 @@ class Planor {
     return _classPrivateFieldGet(this, _errors);
   }
 
+}
+
+async function _sendSms2(msg, msgopts, _ind = 0) {
+  if (_ind === 0) _classPrivateMethodGet(this, _reset, _reset2).call(this);
+
+  if (!_classPrivateFieldGet(this, _services)[_ind]) {
+    _classPrivateFieldGet(this, _errors).push(new Error('NO_SERVICE_TO_TRY'));
+
+    return undefined;
+  }
+
+  const s = _classPrivateFieldGet(this, _services)[_ind];
+
+  if (s.channel != 'sms') {
+    return await _classPrivateMethodGet(this, _sendSms, _sendSms2).call(this, msg, msgopts, _ind + 1);
+  }
+
+  try {
+    return await s.send(msg, msgopts);
+  } catch (e) {
+    _classPrivateFieldGet(this, _errors).push(e);
+
+    return await _classPrivateMethodGet(this, _sendSms, _sendSms2).call(this, msg, msgopts, _ind + 1);
+  }
 }
 
 async function _sendEmail2(mimemsg, msgopts, _ind = 0) {
