@@ -7,22 +7,22 @@ await planor.sendEmail('VERIFY_SIGNIN', {to: 'test@test.com'}, {code: '918273'})
 // check your email for verification code!
 ```
 
-![NPM](https://img.shields.io/npm/l/planor)
-[![npm version](https://badge.fury.io/js/planor.svg)](https://badge.fury.io/js/planor)
-![npm bundle size](https://img.shields.io/bundlephobia/min/planor)
-![npm](https://img.shields.io/npm/dm/planor)
+![NPM](https://img.shields.io/npm/l/@planorjs/core)
+[![npm version](https://badge.fury.io/js/@planorjs/core.svg)](https://badge.fury.io/js/@planorjs/core)
+![npm bundle size](https://img.shields.io/bundlephobia/min/@planorjs/core)
+![npm](https://img.shields.io/npm/dm/@planorjs/core)
 
 ## Install
 ```sh
-npm i planor
+npm i @planorjs/core
 ```
 
 ## Install Plugins
 Choose the services you would like to use to send email and/or sms and install its plugin:
 ```sh
-npm i planor-plugin-gmail
-npm i planor-plugin-smtp
-npm i planor-plugin-postmark
+npm i @planorjs/plugin-gmail
+npm i @planorjs/plugin-smtp
+npm i @planorjs/plugin-postmark
 ```
 
 ## Usage
