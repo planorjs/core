@@ -1,6 +1,6 @@
 {
   "name": "@planorjs/core",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Email and sms sending library with parsable templates and plugins. ✈️",
   "exports": {
     ".": {

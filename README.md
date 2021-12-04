@@ -7,11 +7,6 @@ await planor.sendEmail('VERIFY_SIGNIN', {to: 'test@test.com'}, {code: '918273'})
 // check your email for verification code!
 ```
 
-![NPM](https://img.shields.io/npm/l/@planorjs/core)
-[![npm version](https://badge.fury.io/js/@planorjs/core.svg)](https://badge.fury.io/js/@planorjs/core)
-![npm bundle size](https://img.shields.io/bundlephobia/min/@planorjs/core)
-![npm](https://img.shields.io/npm/dm/@planorjs/core)
-
 ## Install
 ```sh
 npm i @planorjs/core
