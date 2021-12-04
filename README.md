@@ -71,11 +71,31 @@ planor.updateTemplateLiterals({project: 'SomeApp'})
 ```
 
 ### Add Email Service
-By default, there is no email service provider. You need to init one:
+By default, there is no email service provider. You need to add one. Gmail service for example:
 ```js
-import PlanorServiceGmail from 'planor-plugin-gmail'
+import PlanorServiceGmail from '@planorjs/plugin-gmail'
 
-await planor.addService(new PlanorServiceGmail(credentials.gmail))
+const credentials = {
+  sender: 'test@test.com',
+  gcloudProject: 'project-name',
+  googleApplicationCredentials: '/path/to/googleCloudServiceAccount.json'
+}
+
+await planor.addService(new PlanorServiceGmail(credentials))
+```
+
+Or SMTP server:
+```js
+import PlanorServiceSmtp from '@planorjs/plugin-smtp'
+
+const credentials = {
+  host: 'mail.test.net',
+  port: '465',
+  username: 'test@test.com',
+  password: '----'
+}
+
+const service = new PlanorServiceSmtp(credentials)
 ```
 
 ### Send An Email
@@ -89,6 +109,24 @@ As a result, you will get an object that contains a `result.id`.
 You can add as many services as you like. Planor will try to send until it sends successfully.
 
 You can collect errors with `planor.getErrors()`. `sendEmail` won't throw you anything.
+
+### Add SMS Service
+Messagebird, currently the only plugin available for sms:
+```js
+import PlanorServiceMessagebird from '@planorjs/plugin-messagebird'
+
+const credentials = {
+  origin: '...',
+  accessKey: '...'
+}
+
+const service = new PlanorServiceMessagebird(credentials)
+```
+
+### Send An SMS
+```js
+const result = await planor.sendSms('VERIFY_SIGNIN', {recipients: ['+1234567890']}, {code: '918273'})
+```
 
 ## Creating Plugins
 A template for the plugin:
