@@ -46,6 +46,7 @@ const emailTemplate = new PlanorTemplate('email', 'VERIFY_SIGNIN', 'en_US', [
   'Your {{project}} Verification Code', // email subject
   'You have requested to signin to {{project}} and your verification code is "{{code}}"' // email content
 ])
+planor.addTemplate(emailTemplate)
 ```
 Channel is one of email and sms. Id is the name you chose to remember when sending emails. locale is currently experimental state but you still need to specify it.
 
@@ -55,6 +56,7 @@ const emailTemplate = new PlanorTemplate('email', 'VERIFY_SIGNIN', 'en_US', [
   'Your {{project}} Verification Code', // email subject
   {type: 'text/html', template: 'You have requested to signin to {{project}} and your verification code is "{{code}}"'} // email content
 ])
+planor.addTemplate(emailTemplate)
 ```
 Just wrapped it in an object with a type property. It also supports parsing **mjml** templates:
 ```js
@@ -62,6 +64,7 @@ const emailTemplate = new PlanorTemplate('email', 'VERIFY_SIGNIN', 'en_US', [
   'Your {{project}} Verification Code', // email subject
   {type: 'text/mjml', template: '<mjml>You have requested to signin to {{project}} and your verification code is "{{code}}"</mjml>'} // email content
 ])
+planor.addTemplate(emailTemplate)
 ```
 
 ### Configure Template Literals
@@ -96,6 +99,8 @@ const credentials = {
 }
 
 const service = new PlanorServiceSmtp(credentials)
+
+await planor.addService(service)
 ```
 
 ### Send An Email
